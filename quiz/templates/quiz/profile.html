@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Profile:  - {{ user.username }}</h2>
+    <p>Email: {{ user.email }} </p>
+    
+    <h3>Your Quiz Attempts:</h3>
+    <ul>
+        {% for attempt in attempts %}
+            <li>
+                {{ attempt.quiz.title }} - {{ attempt.score }}%
+                ({{ attempt.correct_answers }} / {{ attempt.total_questions}})
+                on {{ attempt.date_attempted | date:"M d, Y H:i"}}
+            </li>
+        {% empty %}
+            <li>No attempts yet.</li>
+        {% endfor %}    
+    </ul>
+{% endblock %}

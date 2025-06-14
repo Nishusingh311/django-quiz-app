@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Available Quizzes</h2>
+
+    <!-- Tag Filter Section -->
+    <h4>Filter by Category:</h4>
+    <ul>
+        <li><a href="{% url 'quiz_list' %}">All</a></li>
+        
+        {% for tag in tags %}
+            <li><a href="{% url 'quiz_list' %}?tag={{ tag.id }}">{{ tag.name }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <!-- Quiz List Section -->
+    <ul>
+        {% for quiz in quizzes %}  <!-- Loops through all quizzes filtered by selected tag -->
+            <li>
+                <a href="{% url 'quiz_detail' quiz.id %}">{{quiz.title}}</a> 
+                     
+            </li>
+        {% empty %}
+            <li>No quizzes available.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

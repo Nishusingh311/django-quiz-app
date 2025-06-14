@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Quiz Result - {{ quiz.title }}</h2>
+    <p>Your Score: {{ score }}%</p>
+    <p> Correct Answers: {{ correct }} out of {{ total }}</p>
+
+    <a href=" {% url 'quiz_list' %}">Back to all Quizes</a>
+{% endblock %}

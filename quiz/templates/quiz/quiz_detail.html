@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'quiz/timer.css' %}">
+
+{% block content %}
+    <h2>{{ quiz.title }}</h2>
+    <p>{{ quiz.description }}</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <!-- Timer -->
+         <div id="timer" data-time-limit="{{ quiz.time_limit }} "></div>
+        {% for question in questions %}
+        <div>
+            <p><strong>{{ question.text }}</strong></p>
+            {% for answer in question.answer_set.all %}
+                <label >
+                    <input type="radio" name="question_{{ question.id }}" value="{{ answer.id }}">
+                        {{ answer.text }}
+                </label><br>
+            {% endfor %}
+        </div>
+        <hr>
+         {% endfor %}
+        <button type="submit"> Submit Quiz</button>
+    </form>
+
+    
+    {% if user.is_staff %}
+        <a href="{% url 'export_results' quiz.id %}">Download CSV Results</a>
+    {% endif %}
+    
+    {% if user.is_staff %}
+        <a href="{% url 'export_results_pdf' quiz.id %}">Download PDF Results</a>
+    {% endif %}
+<script src="{% static 'quiz/timer.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Leaderboard {{ range|title }}</h2>
+
+    <div>
+        <a href="?range=weekly">Weekly</a>
+        <a href="?range=monthly">Monthly</a>
+    </div>
+
+   
+   {% if leaderboard %}
+     <table border="1" cellpadding="5">
+        <tr>
+            <th>Rank</th>
+            <th>Username</th>
+            <th>Average Score (%)</th>
+        </tr>
+        
+        {% for user in top_users  %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ user.user__username }}</td>
+                <td>{{ user.avg_score|floatformat:2 }}</td>
+            </tr>
+        {% endfor %}
+            
+    </table>
+    {% else %}
+         <p>No data available for this time range</p>
+   {% endif %}
+{% endblock  %}
+    

@@ -1,0 +1,81 @@
+/* For Dark mode */
+body.dark{
+    background-color: #121212;
+    color: #ffffff;
+}
+
+body.dark a{
+    color: lightblue;
+}
+
+body.dark button{
+    border-color: #333;
+    color: white;
+    border: 1px solid #555;
+}
+
+/* .dark-mode a{
+    color: #90caf9;
+}
+
+button{
+    margin: 1rem;
+    padding: 0.5rem, 1rem;
+    cursor: pointer;
+} */
+/* dark mode ends */
+
+/*   */
+.search-bar{
+    margin-bottom: 20px;
+}
+
+.search-bar input{
+    padding: 8px;
+    width:  250px;
+    border:  1px solid #ccc;
+    border-radius:  5px;
+}
+
+.search-bar button{
+    padding: 8px 15px;
+    border-color:  #007bff;
+    border:  none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search-bar button:hover{
+    border-color: #0056b3;
+}
+
+ul.quiz-list{
+    list-style-type: none;
+    padding-left: 0;
+}
+
+ul.quiz-list li{
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    border-color: #f9f9f9;
+}
+
+.pagination{
+    margin-top: 20px;
+}
+
+.pagination a{
+    margin-right: 10px;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-color: #007bff;
+    color: white;
+    border-radius: 5px;
+}
+
+.pagination a:hover{
+    border-color: #0056b3;
+}
