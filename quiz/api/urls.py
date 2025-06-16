@@ -11,5 +11,6 @@ urlpatterns = [
     path('quizzes/<int:quiz_id>/', views.api_quiz_detail, name='api_quiz_detail'),
     path('quizzes/<int:quiz_id>/submit/', views.api_submit_quiz, name='api_quiz_detail'),
     path('fetch-quiz/', views.fetch_quiz_from_external_api, name='fetch_quiz_from_external_api'),
+    path('fetch-multiple', views.fetch_multiple_categories, name='fetch_multiple_categories'),
 ]
 

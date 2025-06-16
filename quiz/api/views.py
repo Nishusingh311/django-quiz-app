@@ -141,3 +141,61 @@ def fetch_quiz_from_external_api(request):
                 )
 
     return Response({'status': 'Quiz imported successfully!'})    # DRF's way of returning data as JSON
+
+
+# =====================================================================================
+# *********************Fetching Data From External API ********************************
+# =====================================================================================
+
+@api_view(['POST']) # This endpoint is for triggeringa data fetch, not retriving
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAdminUser])
+def fetch_multiple_categories(request):
+    # 1. External API endpoint and my API key
+    url  = 'https://quizapi.io/api/v1/questions'    # API Endpoint from quizapi.io
+    headers = {
+        'X-API-Key': 'TJVBF6dlFfLfVWT6Lgkv4BV1RTcpK1eR7FJpGh5r'
+    }
+
+    categories = ['code', 'linux', 'bash', 'docker', 'cms', 'sql', 'devops']  #choose which categories to import
+
+    for category in categories:
+        params = {
+            'category': category,
+            'limit': 10
+        }
+
+        # 2. Make request to external API
+        response = request.get(url, headers=headers, params=params)  # sends a get request to quizapi.io
+        data = response.json()                  # json parses response into puthon list of dictionaries
+
+        # 3. Create new quiz per category
+        quiz = Quiz.objects.create(
+        title = f"{category.capitalize()} Imported from QuizAPI.io",
+        description = f"A {category} quiz fetched from QuizAPI.io"
+        )
+        
+        # Add 'QuizAPI' and category tag
+        quiz.tags.add(Tag.objects.get_or_create(name="QuizAPI")[0])
+        quiz.tags.add(Tag.objects.get_or_create(name=category.capitalize())[0])
+
+        # 4. Loop through the questions and save to DB
+        for item in data:
+            question = Question.objects.create(
+            quiz=quiz,
+            text=item['question']
+            )
+
+            # Answers from API are dictionary like {'ans1':"..", 'ans2':"..."}
+            for key, value in item['answers'].items():
+                if value:
+                    is_correct = key == item.get('correct_answer')    # is_correct = key: checks if the current key(like 'answer_a') matches the correct answer, item.get('correct_answer') gets the answer (like 'answer_b) so is_correct='answer_a' == 'answer_b' will be False
+                    # Only one answer will get is_correct = True all others get False
+                    Answer.objects.create(
+                        question=question,
+                        text=value,
+                        is_correct=is_correct
+                    )
+    return Response({'status': 'Multiple quizzes imported successfully!'})    
+
+

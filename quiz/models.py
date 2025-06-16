@@ -5,7 +5,7 @@ class Quiz(models.Model):   #models.Model base class for all models
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    time_limit = models.PositiveIntegerField(default=60)  # time limit in seconds default 60s, customizable for each quiz in admin panel
+    time_limit = models.PositiveIntegerField(default=600)  # time limit in seconds default 60s, customizable for each quiz in admin panel
 
     tags = models.ManyToManyField('Tag', related_name='quizzes', blank=True)
     def __str__(self):
