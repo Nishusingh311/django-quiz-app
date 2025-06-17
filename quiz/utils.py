@@ -50,7 +50,7 @@ def fetch_quiz_from_quizapi(categories, api_key):
             description = f"A {category} quiz fetched from QuizAPI.io"
         )
 
-        quiz.tags.add(Tag.objects.get_or_create(name="WuizAPI")[0])
+        quiz.tags.add(Tag.objects.get_or_create(name="QuizAPI")[0])
         quiz.tags.add(Tag.objects.get_or_create(name=category.capitalize())[0])
 
         

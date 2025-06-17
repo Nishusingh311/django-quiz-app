@@ -1,26 +1,56 @@
 {% extends 'base.html' %}
+
 {% block content %}
-    <h2>Available Quizzes</h2>
+<div class="max-w-4xl mx-auto px-4 py-6 bg-white dark:bg-gray-900 rounded shadow-md">
+    
+    <!-- Page Heading -->
+    <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6">Available Quizzes</h2>
 
     <!-- Tag Filter Section -->
-    <h4>Filter by Category:</h4>
-    <ul>
-        <li><a href="{% url 'quiz_list' %}">All</a></li>
-        
-        {% for tag in tags %}
-            <li><a href="{% url 'quiz_list' %}?tag={{ tag.id }}">{{ tag.name }}</a></li>
-        {% endfor %}
-    </ul>
+    <div class="mb-8">
+        <h4 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Filter by Category:</h4>
+        <div class="flex flex-wrap gap-2">
+            <!-- Link to Show All Quizzes -->
+            <a href="{% url 'quiz_list' %}" 
+               class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm">
+                All
+            </a>
+
+            <!-- Loop Through Available Tags -->
+            {% for tag in tags %}
+                <a href="{% url 'quiz_list' %}?tag={{ tag.id }}"
+                   class="px-3 py-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white rounded text-sm">
+                    {{ tag.name }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
 
     <!-- Quiz List Section -->
-    <ul>
-        {% for quiz in quizzes %}  <!-- Loops through all quizzes filtered by selected tag -->
-            <li>
-                <a href="{% url 'quiz_detail' quiz.id %}">{{quiz.title}}</a> 
-                     
-            </li>
-        {% empty %}
-            <li>No quizzes available.</li>
+    {% if quizzes %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {% for quiz in quizzes %}
+        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-800 shadow-sm hover:shadow-md transition">
+            <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">
+                <a href="{% url 'quiz_detail' quiz.id %}" class="hover:underline">
+                    {{ quiz.title }}
+                </a>
+            </h3>
+            
+            {% if quiz.description %}
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                {{ quiz.description|truncatewords:15 }}
+            </p>
+            {% endif %}
+
+            {% if quiz.time_limit %}
+            <span class="text-xs text-gray-500 dark:text-gray-400">⏱ Time Limit: {{ quiz.time_limit }} mins</span>
+            {% endif %}
+        </div>
         {% endfor %}
-    </ul>
+    </div>
+    {% else %}
+        <p class="text-gray-600 dark:text-gray-300 mt-4">No quizzes available in this category.</p>
+    {% endif %}
+</div>
 {% endblock %}

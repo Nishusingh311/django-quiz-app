@@ -1,8 +1,39 @@
 {% extends 'base.html' %}
-{% block content %}
-    <h2>Quiz Result - {{ quiz.title }}</h2>
-    <p>Your Score: {{ score }}%</p>
-    <p> Correct Answers: {{ correct }} out of {{ total }}</p>
 
-    <a href=" {% url 'quiz_list' %}">Back to all Quizes</a>
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-8 bg-white dark:bg-gray-900 shadow-lg rounded-md text-center">
+
+    <!-- Quiz Title -->
+    <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-4">🎓 Quiz Result</h2>
+    <h3 class="text-xl text-blue-600 dark:text-blue-400 font-semibold mb-6">{{ quiz.title }}</h3>
+
+    <!-- Score Display -->
+    <div class="text-2xl font-semibold text-gray-700 dark:text-gray-200 mb-4">
+        Your Score: <span class="text-green-600 dark:text-green-400">{{ score }}%</span>
+    </div>
+    <p class="text-gray-600 dark:text-gray-300 mb-6">
+        ✅ Correct Answers: {{ correct }} out of {{ total }}
+    </p>
+
+    <!-- Conditional Feedback Message -->
+    {% if score|floatformat:0 >= 70 %}
+        <div class="bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-100 p-4 rounded mb-6">
+            🏆 <strong>Great Job!</strong> You did really well! Keep up the good work!
+        </div>
+    {% elif score|floatformat:0 >= 40 %}
+        <div class="bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-100 p-4 rounded mb-6">
+            👍 <strong>Not bad!</strong> You’re almost there. Try again to improve your score!
+        </div>
+    {% else %}
+        <div class="bg-red-100 dark:bg-red-800 text-red-800 dark:text-red-100 p-4 rounded mb-6">
+            😔 <strong>Better Luck Next Time!</strong> Don’t give up — review and try again.
+        </div>
+    {% endif %}
+
+    <!-- Back Button -->
+    <a href="{% url 'quiz_list' %}"
+       class="inline-block mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded shadow transition">
+        ⬅ Back to All Quizzes
+    </a>
+</div>
 {% endblock %}

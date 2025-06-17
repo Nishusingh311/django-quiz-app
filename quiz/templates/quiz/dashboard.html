@@ -1,26 +1,37 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h2>Your Quiz Attempts</h2>
-    {% if attempts %}
-        <table border="1">
-            <tr>
-                <th>Quiz</th>
-                <th>Score</th>
-                <th>Correct</th>
-                <th>total</th>
-                <th>Date</th>
+<div class="max-w-5xl mx-auto p-6 space-y-6">
+
+  <h2 class="text-2xl font-bold text-gray-800 dark:text-white">📊 Your Quiz Attempts</h2>
+
+  {% if attempts %}
+    <div class="overflow-x-auto bg-white dark:bg-gray-800 shadow rounded-lg">
+      <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
+        <thead class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100">
+          <tr>
+            <th class="px-4 py-2 text-left">Quiz</th>
+            <th class="px-4 py-2 text-center">Score</th>
+            <th class="px-4 py-2 text-center">Correct</th>
+            <th class="px-4 py-2 text-center">Total</th>
+            <th class="px-4 py-2 text-center">Date</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+          {% for attempt in attempts %}
+            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+              <td class="px-4 py-2">{{ attempt.quiz.title }}</td>
+              <td class="px-4 py-2 text-center font-semibold text-green-600 dark:text-green-400">{{ attempt.score }}%</td>
+              <td class="px-4 py-2 text-center">{{ attempt.correct_answers }}</td>
+              <td class="px-4 py-2 text-center">{{ attempt.total_questions }}</td>
+              <td class="px-4 py-2 text-center">{{ attempt.date_attemoted|date:"d M Y H:i" }}</td>
             </tr>
-            {% for attempt in attempts %}
-            <tr>
-                <td>{{attempt.quiz.title }}</td>
-                <td>{{attempt.score}}</td>
-                <td>{{attempt.correct_answers }}</td>
-                <td>{{attempt.total_questions}}</td>
-                <td>{{attempt.date_attemoted| date:"d M Y H:i"}}</td>
-            </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <p>You haven't taken any qyuzzes yet.</p>
-    {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="text-gray-500 dark:text-gray-300">You haven't taken any quizzes yet.</p>
+  {% endif %}
+
+</div>
 {% endblock %}

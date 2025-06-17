@@ -1,48 +1,68 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="transition-all duration-300">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{% static 'quiz/styles.css' %}" rel="stylesheet">
 
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
     
-    <title>Quiz App</title>
+    <title>
+        {% block title %}Quizzo{% endblock %}
+    </title>
 </head>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-white min-h-screen flex flex-col">
 
-
-
-<body id="main-body">
-    <!-- Dark mode toggle button -->
-    <button id="toggle-dark-mode">🌙 Toggle Dark Mode</button>
-    <!-- Navigation Bar -->
-     <nav>
-        {% if user.is_authenticated %}
-           | <a href="{% url 'home' %}">Home</a>  |
-           <a href="{% url 'dashboard' %}">Dashboard</a> |
-           <a href="{% url 'profile' %}">Profile</a> |
-           <a href="{% url 'leaderboard' %}"></a>
-            <a href="{% url 'logout' %}">Logout</a> 
-        {% else %}
-            <a href="{% url 'home' %}">Home</a> |
-            <a href="{% url 'login' %}">Login</a> |
-            <a href="{% url 'signup' %}">Sign Up</a>
+    <!-- Top Navigation -->
+    <nav class="bg-white dark:bg-gray-800 shadow p-4 flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-blue-600">Quizzo</h1>
+        <div class="space-x-4">
+            {% if user.is_authenticated %}
+                <a href="{% url 'home' %}" class="hover:text-blue-500">Home</a>
+                <a href="{% url 'dashboard' %}" class="hover:text-blue-500">Dashboard</a>
+                <a href="{% url 'profile' %}" class="hover:text-blue-500">Profile</a>
+                <a href="{% url 'leaderboard' %}" class="hover:text-blue-500">Leaderboard</a>
+                <a href="{% url 'logout' %}" class="hover:text-red-500">Logout</a>
+            {% else %}
+                <a href="{% url 'home' %}" class="hover:text-blue-500">Home</a>
+                <a href="{% url 'login' %}" class="hover:text-green-500">Login</a>
+                <a href="{% url 'signup' %}" class="hover:text-green-500">Sign Up</a>
             {% endif %}
-     </nav>
+        </div>
+    </nav>
 
-     <hr>
+    <!-- Dark Mode Toggle -->
+    <div class="flex justify-end px-4 py-2">
+        <button id="toggle-dark-mode" class="bg-gray-200 dark:bg-gray-700 px-4 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+            🌙 Dark Mode
+        </button>
+    </div>
 
-     <!-- Flash messages -->
-      {% if messages %}
-        {% for message in messages %}
-            <p class="flash {{ message.tags}}" style="color: green;">{{ message}}</p>
-        {% endfor %}
-    {% endif %}
+    <!-- Flash Messages -->
+    <div class="px-4">
+        {% if messages %}
+            {% for message in messages %}
+                <p class="mt-2 p-2 rounded bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+                    {{ message }}
+                </p>
+            {% endfor %}
+        {% endif %}
+    </div>
 
-    <!-- Page-specific content -->
-     {% block content %}
-     {% endblock %}
-     <script src="{% static 'quiz/darkmode.js' %}" defer></script>
+    <!-- Page Content -->
+    <main class="flex-grow p-4">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 bg-gray-100 dark:bg-gray-800 text-sm text-gray-500 dark:text-gray-300">
+        © 2025 Quizzo. All rights reserved.
+    </footer>
+
+    <!-- Dark Mode Script -->
+    <script src="{% static 'quiz/darkmode.js' %}" defer></script>
 
 </body>
 </html>

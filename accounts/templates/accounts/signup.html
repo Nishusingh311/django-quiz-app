@@ -1,9 +1,46 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h2>Sign Up</h2>
-    <form method="POST">
+<div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+    <h2 class="text-3xl font-bold mb-6 text-center text-gray-800 dark:text-white">Sign Up</h2>
+
+    <form method="POST" class="space-y-5">
         {% csrf_token %}
-        {{ form.as_p}}
-        <button type="submit">Register</button>
+
+        <!-- Username -->
+        <div>
+            <label for="id_username" class="block mb-1 text-sm font-medium">Username</label>
+            <input type="text" name="username" id="id_username" required
+                   class="w-full px-4 py-2 border rounded-md bg-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring focus:ring-blue-500">
+        </div>
+
+        <!-- Email -->
+        <div>
+            <label for="id_email" class="block mb-1 text-sm font-medium">Email</label>
+            <input type="email" name="email" id="id_email"
+                   class="w-full px-4 py-2 border rounded-md bg-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring focus:ring-blue-500">
+        </div>
+
+        <!-- Password1 -->
+        <div>
+            <label for="id_password1" class="block mb-1 text-sm font-medium">Password</label>
+            <input type="password" name="password1" id="id_password1" required
+                   class="w-full px-4 py-2 border rounded-md bg-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring focus:ring-blue-500">
+        </div>
+
+        <!-- Password2 -->
+        <div>
+            <label for="id_password2" class="block mb-1 text-sm font-medium">Confirm Password</label>
+            <input type="password" name="password2" id="id_password2" required
+                   class="w-full px-4 py-2 border rounded-md bg-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring focus:ring-blue-500">
+        </div>
+
+        <!-- Submit -->
+        <div>
+            <button type="submit"
+                    class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-semibold transition">
+                Register
+            </button>
+        </div>
     </form>
+</div>
 {% endblock %}

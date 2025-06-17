@@ -1,38 +1,64 @@
 {% extends "base.html" %}
 {% block content %}
-    <h2>Available Quizzes</h2>
 
-    <!--  Search Form -->
-    <form action="" method="GET">
-        <input type="text" name="q" placeholder="Search quizzes..." value="{{request.GET.q}}">  <!--  name = "q": a parameter key that backend uses to filter -->
-        <button type="submit">Search</button>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Available Quizzes</h2>
+
+    <!-- Search Form -->
+    <form action="" method="GET" class="mb-6 flex flex-col sm:flex-row gap-3 sm:items-center justify-center">
+        <input 
+            type="text" 
+            name="q" 
+            placeholder="Search quizzes..." 
+            value="{{ request.GET.q }}"
+            class="w-full sm:w-2/3 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+        <button 
+            type="submit"
+            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+        >
+            Search
+        </button>
     </form>
 
-    <!-- Paginated Quiz List (list of all quiz displayed on home page) -->
-    <ul>
-        
-        {% for quiz in  quizzes %}
-            <li>
-                <a href="{% url 'quiz_detail' quiz.id %}">{{ quiz.title }}</a> <!--  Displays each quiz title as a clickable -->
-            </li>
+    <!-- Quiz List -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {% for quiz in quizzes %}
+            <div class="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition">
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">
+                    <a href="{% url 'quiz_detail' quiz.id %}" class="hover:text-blue-600">
+                        {{ quiz.title }}
+                    </a>
+                </h3>
+                <p class="text-sm text-gray-500">Created: {{ quiz.created_at|date:"M d, Y" }}</p>
+            </div>
         {% empty %}
-            <li>No quizzes found.</li>
+            <p class="text-center col-span-2 text-gray-500">No quizzes found.</p>
         {% endfor %}
-            
-    </ul>
-
-    <!-- Paginated Controls -->
-    <div>
-        {% if quizzes.has_previous %}
-            <a href="?q={{ request.GET.q }} &page={{ quizzes.previous_page_number }}">Previous</a>
-        {% endif %}
-
-        <span>Page {{ quizzes.number }} of {{ quizzes.paginator.num_pages }}</span>
-
-        
-        {% if quizzes.has_next %}
-            <a href="?q={{ request.GET.q }} &page={{ quizzes.next_page_number }}">Next</a>
-        {% endif %}
-            
     </div>
+
+    <!-- Pagination Controls -->
+    <div class="mt-6 flex justify-center items-center space-x-4">
+        {% if quizzes.has_previous %}
+            <a href="?q={{ request.GET.q }}&page={{ quizzes.previous_page_number }}"
+               class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition">
+                Previous
+            </a>
+        {% endif %}
+
+        <span class="text-gray-700">
+            Page {{ quizzes.number }} of {{ quizzes.paginator.num_pages }}
+        </span>
+
+        {% if quizzes.has_next %}
+            <a href="?q={{ request.GET.q }}&page={{ quizzes.next_page_number }}"
+               class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition">
+                Next
+            </a>
+        {% endif %}
+    </div>
+
+</div>
+
 {% endblock %}

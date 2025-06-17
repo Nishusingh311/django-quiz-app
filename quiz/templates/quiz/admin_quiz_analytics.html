@@ -1,75 +1,69 @@
 {% load custom_tags %}
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <title>Admin Quiz Analytics Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Admin Quiz Analytics Dashboard</h1>
+<body class="bg-gray-100 text-gray-900 p-6">
 
-    <p><strong>Total Quiz Attempts:</strong> {{ total_attempts }}</p>
-    <p><strong>Total Badges Awarded:</strong> {{ total_badges }}</p>
+    <div class="max-w-5xl mx-auto space-y-6">
+        <h1 class="text-3xl font-bold text-center">📊 Admin Quiz Analytics Dashboard</h1>
 
-      <form method="get" >     <!--  Sends form as a GET request in URL -->
-        <label for="date_filter"><strong>Filter by Date:</strong></label>
-        <select name="date_filter" id="date_filter" onchange="this.form.submit()">   <!--  name="date_filter" makes URL like: ?date_filter=weekly   onchange="this.form.submit()" refreshes data when the dropdown is changee-->
-            <option value="all" 
-            {% if selected_filter == "all" %}
-                selected
-            {% endif %}
-                >All Time</option>
-            <option value="weekly" 
-            {% if selected_filter == "weekly" %}
-                selected
-            {% endif %}
-                >Last 7 Days</option>
-            <option value="monthly" 
-            {% if selected_filter == "monthly" %}
-                selected
-            {% endif %}
-                >Last 30 Days</option>
-        </select>
-    </form>
+        <div class="bg-white shadow p-4 rounded-md">
+            <p><strong>Total Quiz Attempts:</strong> {{ total_attempts }}</p>
+            <p><strong>Total Badges Awarded:</strong> {{ total_badges }}</p>
+        </div>
 
+        <!-- Date Filter Dropdown -->
+        <form method="get" class="bg-white shadow p-4 rounded-md">
+            <label for="date_filter" class="block font-semibold mb-2">📅 Filter by Date:</label>
+            <select name="date_filter" id="date_filter" onchange="this.form.submit()"
+                class="border border-gray-300 rounded px-3 py-2 w-full sm:w-60">
+                <option value="all" {% if selected_filter == "all" %}selected{% endif %}>All Time</option>
+                <option value="weekly" {% if selected_filter == "weekly" %}selected{% endif %}>Last 7 Days</option>
+                <option value="monthly" {% if selected_filter == "monthly" %}selected{% endif %}>Last 30 Days</option>
+            </select>
+        </form>
 
-    <h2>Average Scores Per Quiz</h2>
-    <canvas id="avgScoreChart" width="600" height="300"></canvas>
+        <!-- Average Scores Chart -->
+        <div class="bg-white shadow p-4 rounded-md">
+            <h2 class="text-xl font-semibold mb-2">📈 Average Scores Per Quiz</h2>
+            <canvas id="avgScoreChart" height="250"></canvas>
+        </div>
 
-    <h2>Number of Users Attempting Each Quiz</h2>
-    <canvas id="userCountChart" width="600" height="300"></canvas>
+        <!-- User Count Chart -->
+        <div class="bg-white shadow p-4 rounded-md">
+            <h2 class="text-xl font-semibold mb-2">👥 Number of Users Attempting Each Quiz</h2>
+            <canvas id="userCountChart" height="250"></canvas>
+        </div>
+    </div>
 
+    <!-- Chart.js Script -->
     <script>
-        // Safely render JSON data into JavaScript variables
         const avgScoreLabels = JSON.parse('{{ avg_score_labels|escapejs }}');
         const avgScoreData = JSON.parse('{{ avg_score_data|escapejs }}');
 
         const userCountLabels = JSON.parse('{{ user_count_labels|escapejs }}');
         const userCountData = JSON.parse('{{ user_count_data|escapejs }}');
 
-        // Average Score Chart
-        const ctx1 = document.getElementById('avgScoreChart').getContext('2d');
-        const avgScoreChart = new Chart(ctx1, {
+        new Chart(document.getElementById('avgScoreChart'), {
             type: 'bar',
             data: {
                 labels: avgScoreLabels,
                 datasets: [{
                     label: 'Average Score (%)',
                     data: avgScoreData,
-                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                    borderColor: 'rgba(59, 130, 246, 1)',
                     borderWidth: 1
                 }]
             },
             options: {
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Average Scores by Quiz'
-                    }
-                },
+                responsive: true,
                 scales: {
                     y: {
                         beginAtZero: true,
@@ -89,27 +83,20 @@
             }
         });
 
-        // User Count Chart
-        const ctx2 = document.getElementById('userCountChart').getContext('2d');
-        const userCountChart = new Chart(ctx2, {
+        new Chart(document.getElementById('userCountChart'), {
             type: 'bar',
             data: {
                 labels: userCountLabels,
                 datasets: [{
                     label: 'Users Attempted',
                     data: userCountData,
-                    backgroundColor: 'rgba(255, 99, 132, 0.7)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(234, 88, 12, 0.6)',
+                    borderColor: 'rgba(234, 88, 12, 1)',
                     borderWidth: 1
                 }]
             },
             options: {
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Number of Users per Quiz'
-                    }
-                },
+                responsive: true,
                 scales: {
                     y: {
                         beginAtZero: true,
