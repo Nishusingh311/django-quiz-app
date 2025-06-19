@@ -1,64 +1,47 @@
 {% extends "base.html" %}
 {% block content %}
+<div class="max-w-5xl mx-auto px-4 py-8">
 
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+  <!--  Header -->
+  <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 text-center">Available Quizzes</h2>
 
-    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Available Quizzes</h2>
+  <!--  Search -->
+  <form action="" method="GET" class="mb-6 flex flex-col md:flex-row gap-2 justify-center">
+    <input type="text" name="q" placeholder="Search quizzes..." value="{{ request.GET.q }}"
+      class="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white">
+    <button type="submit"
+      class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">Search</button>
+  </form>
 
-    <!-- Search Form -->
-    <form action="" method="GET" class="mb-6 flex flex-col sm:flex-row gap-3 sm:items-center justify-center">
-        <input 
-            type="text" 
-            name="q" 
-            placeholder="Search quizzes..." 
-            value="{{ request.GET.q }}"
-            class="w-full sm:w-2/3 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-        <button 
-            type="submit"
-            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-        >
-            Search
-        </button>
-    </form>
+  <!--  Quiz Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for quiz in quizzes %}
+      <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm hover:shadow-md transition">
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">{{ quiz.title }}</h3>
+        <p class="text-sm text-gray-500 mb-4">📚 {{ quiz.question_count }} Questions · ⏱️ {{ quiz.time_limit }} mins</p>
 
-    <!-- Quiz List -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {% for quiz in quizzes %}
-            <div class="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition">
-                <h3 class="text-xl font-semibold text-gray-800 mb-2">
-                    <a href="{% url 'quiz_detail' quiz.id %}" class="hover:text-blue-600">
-                        {{ quiz.title }}
-                    </a>
-                </h3>
-                <p class="text-sm text-gray-500">Created: {{ quiz.created_at|date:"M d, Y" }}</p>
-            </div>
-        {% empty %}
-            <p class="text-center col-span-2 text-gray-500">No quizzes found.</p>
-        {% endfor %}
-    </div>
+        <a href="{% url 'quiz_detail' quiz.id %}"
+          class="inline-block w-full text-center bg-blue-600 text-white font-medium py-2 rounded-md hover:bg-blue-700 transition">Start Now</a>
+      </div>
+    {% empty %}
+      <p class="text-gray-500 dark:text-gray-300 col-span-3">No quizzes found.</p>
+    {% endfor %}
+  </div>
 
-    <!-- Pagination Controls -->
-    <div class="mt-6 flex justify-center items-center space-x-4">
-        {% if quizzes.has_previous %}
-            <a href="?q={{ request.GET.q }}&page={{ quizzes.previous_page_number }}"
-               class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition">
-                Previous
-            </a>
-        {% endif %}
+  <!--  Pagination -->
+  <div class="mt-8 flex justify-center items-center gap-4 text-gray-700 dark:text-gray-300">
+    {% if quizzes.has_previous %}
+      <a href="?q={{ request.GET.q }}&page={{ quizzes.previous_page_number }}"
+         class="px-3 py-1 border rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">Previous</a>
+    {% endif %}
 
-        <span class="text-gray-700">
-            Page {{ quizzes.number }} of {{ quizzes.paginator.num_pages }}
-        </span>
+    <span>Page {{ quizzes.number }} of {{ quizzes.paginator.num_pages }}</span>
 
-        {% if quizzes.has_next %}
-            <a href="?q={{ request.GET.q }}&page={{ quizzes.next_page_number }}"
-               class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition">
-                Next
-            </a>
-        {% endif %}
-    </div>
+    {% if quizzes.has_next %}
+      <a href="?q={{ request.GET.q }}&page={{ quizzes.next_page_number }}"
+         class="px-3 py-1 border rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">Next</a>
+    {% endif %}
+  </div>
 
 </div>
-
 {% endblock %}

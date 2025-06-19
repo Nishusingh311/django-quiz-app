@@ -1,37 +1,37 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="max-w-5xl mx-auto p-6 space-y-6">
-
-  <h2 class="text-2xl font-bold text-gray-800 dark:text-white">📊 Your Quiz Attempts</h2>
+<div class="max-w-5xl mx-auto mt-10 px-4">
+  <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-8">📊 Your Quiz Attempts</h2>
 
   {% if attempts %}
-    <div class="overflow-x-auto bg-white dark:bg-gray-800 shadow rounded-lg">
-      <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
-        <thead class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100">
-          <tr>
-            <th class="px-4 py-2 text-left">Quiz</th>
-            <th class="px-4 py-2 text-center">Score</th>
-            <th class="px-4 py-2 text-center">Correct</th>
-            <th class="px-4 py-2 text-center">Total</th>
-            <th class="px-4 py-2 text-center">Date</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-          {% for attempt in attempts %}
-            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
-              <td class="px-4 py-2">{{ attempt.quiz.title }}</td>
-              <td class="px-4 py-2 text-center font-semibold text-green-600 dark:text-green-400">{{ attempt.score }}%</td>
-              <td class="px-4 py-2 text-center">{{ attempt.correct_answers }}</td>
-              <td class="px-4 py-2 text-center">{{ attempt.total_questions }}</td>
-              <td class="px-4 py-2 text-center">{{ attempt.date_attemoted|date:"d M Y H:i" }}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for attempt in attempts %}
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md border dark:border-gray-700 transition hover:scale-[1.02] duration-200">
+          <h3 class="text-xl font-semibold text-indigo-600 dark:text-indigo-400 mb-2">{{ attempt.quiz.title }}</h3>
+          
+          <div class="text-sm text-gray-600 dark:text-gray-300">
+            <p>📅 <strong>Date:</strong> {{ attempt.date_attempted|date:"d M Y H:i" }}</p>
+            <p>✅ <strong>Correct:</strong> {{ attempt.correct_answers }} / {{ attempt.total_questions }}</p>
+            <p>🎯 <strong>Score:</strong> {{ attempt.score }}%</p>
+          </div>
+
+          <!-- Score Progress Bar -->
+          <div class="w-full mt-4 bg-gray-200 dark:bg-gray-700 h-2 rounded-full">
+            <div class="h-full rounded-full 
+              {% if attempt.score >= 80 %}
+                bg-green-500
+              {% elif attempt.score >= 50 %}
+                bg-yellow-400
+              {% else %}
+                bg-red-500
+              {% endif %}
+            " style="width: {{ attempt.score }}%"></div>
+          </div>
+        </div>
+      {% endfor %}
     </div>
   {% else %}
-    <p class="text-gray-500 dark:text-gray-300">You haven't taken any quizzes yet.</p>
+    <p class="text-center text-gray-500 dark:text-gray-300 mt-8">You haven't taken any quizzes yet.</p>
   {% endif %}
-
 </div>
 {% endblock %}

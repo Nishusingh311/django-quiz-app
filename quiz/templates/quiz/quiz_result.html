@@ -1,39 +1,21 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<div class="max-w-2xl mx-auto px-4 py-8 bg-white dark:bg-gray-900 shadow-lg rounded-md text-center">
+<div class="max-w-xl mx-auto mt-10 p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg text-center">
+    <h2 class="text-2xl font-bold text-indigo-600 dark:text-indigo-400 mb-4">Quiz Result: {{ quiz.title }}</h2>
 
-    <!-- Quiz Title -->
-    <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-4">🎓 Quiz Result</h2>
-    <h3 class="text-xl text-blue-600 dark:text-blue-400 font-semibold mb-6">{{ quiz.title }}</h3>
+    <p class="text-lg font-semibold text-gray-700 dark:text-gray-300">🎯 Your Score: <span class="text-indigo-600 dark:text-indigo-400">{{ score }}%</span></p>
+    <p class="text-md text-gray-600 dark:text-gray-300 mb-4">✅ Correct Answers: {{ correct }} out of {{ total }}</p>
 
-    <!-- Score Display -->
-    <div class="text-2xl font-semibold text-gray-700 dark:text-gray-200 mb-4">
-        Your Score: <span class="text-green-600 dark:text-green-400">{{ score }}%</span>
-    </div>
-    <p class="text-gray-600 dark:text-gray-300 mb-6">
-        ✅ Correct Answers: {{ correct }} out of {{ total }}
-    </p>
-
-    <!-- Conditional Feedback Message -->
-    {% if score|floatformat:0 >= 70 %}
-        <div class="bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-100 p-4 rounded mb-6">
-            🏆 <strong>Great Job!</strong> You did really well! Keep up the good work!
-        </div>
-    {% elif score|floatformat:0 >= 40 %}
-        <div class="bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-100 p-4 rounded mb-6">
-            👍 <strong>Not bad!</strong> You’re almost there. Try again to improve your score!
-        </div>
+    <!-- 🎉 Message Based on Score -->
+    {% if score >= 80 %}
+        <p class="text-green-600 dark:text-green-400 text-lg mt-4 font-semibold">🏆 Congratulations! Excellent performance!</p>
+    {% elif score >= 50 %}
+        <p class="text-yellow-600 dark:text-yellow-400 text-lg mt-4 font-semibold">👍 Good effort! You can do even better!</p>
     {% else %}
-        <div class="bg-red-100 dark:bg-red-800 text-red-800 dark:text-red-100 p-4 rounded mb-6">
-            😔 <strong>Better Luck Next Time!</strong> Don’t give up — review and try again.
-        </div>
+        <p class="text-red-600 dark:text-red-400 text-lg mt-4 font-semibold">😢 Better luck next time! Keep practicing!</p>
     {% endif %}
 
     <!-- Back Button -->
-    <a href="{% url 'quiz_list' %}"
-       class="inline-block mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded shadow transition">
-        ⬅ Back to All Quizzes
-    </a>
+    <a href="{% url 'quiz_list' %}" class="inline-block mt-6 px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Back to All Quizzes</a>
 </div>
 {% endblock %}

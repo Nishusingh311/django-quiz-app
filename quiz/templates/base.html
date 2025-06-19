@@ -11,6 +11,12 @@
     <title>
         {% block title %}Quizzo{% endblock %}
     </title>
+
+    <script>
+        tailwind.config = {
+            darkmode: 'class',
+        }
+    </script>
 </head>
 <body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-white min-h-screen flex flex-col">
 
@@ -34,9 +40,11 @@
 
     <!-- Dark Mode Toggle -->
     <div class="flex justify-end px-4 py-2">
-        <button id="toggle-dark-mode" class="bg-gray-200 dark:bg-gray-700 px-4 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition">
-            🌙 Dark Mode
-        </button>
+    <button id="dark-toggle" class="relative w-14 h-7 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center transition duration-300">
+        <span class="absolute left-1 text-yellow-400 text-lg dark:hidden">🌞</span>
+        <span class="absolute right-1 text-blue-300 text-lg hidden dark:inline">🌙</span>
+        <div id="toggle-thumb" class="absolute left-1 h-5 w-5 bg-white rounded-full shadow transition-transform duration-300"></div>
+    </button>
     </div>
 
     <!-- Flash Messages -->

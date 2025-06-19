@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.admin.views.decorators import staff_member_required
-from .models import Quiz, Question, Answer, QuizAttempt, Badge, UserBadge
+from .models import Quiz, Question, Answer, QuizAttempt, Badge, UserBadge, Tag
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 import csv
@@ -10,23 +10,24 @@ from xhtml2pdf import pisa
 from django.db.models import Avg, Count
 from .utils import assign_badges
 from django.core.mail import send_mail
-from .models import Quiz, QuizAttempt, Tag
 from django.core.paginator import Paginator
 from django.utils.timezone import now, timedelta
 from django.contrib.auth.models import User
 from datetime import timedelta,datetime
-from django.utils.timezone import now
+
 
 # Create your views here.
 def home(request):
     query = request.GET.get('q','')   # Get search query from URL
+
+    quizzes = Quiz.objects.annotate(question_count=Count('question'))
     if query:
-        quizzes = Quiz.objects.filter(title__icontains=query) #title_icontains searches titles case-insensitively 
-    else:
-        quizzes = Quiz.objects.all()
+        quizzes = quizzes.filter(title__icontains=query) 
+    # else:
+    #     quizzes = Quiz.objects.all()
 
     # Add pagination: Show 10 quizzes oer page
-    paginator = Paginator(quizzes, 10)
+    paginator = Paginator(quizzes, 9)
     page_number = request.GET.get('page')
     page_obj  = paginator.get_page(page_number)
 
@@ -104,7 +105,9 @@ def quiz_detail(request, quiz_id): # quiz_id is the dynamic parameter coming fro
                                                         'total': total_questions})
 
     return render(request, 'quiz/quiz_detail.html', {'quiz':quiz, 
-                                                     'questions': questions})
+                                                     'questions': questions,
+                                                     'time_limit_seconds': quiz.time_limit * 60, # Converts minutes to seconds
+                                                     })
 
 
 @login_required
@@ -192,14 +195,14 @@ def leaderboard_view(request):
     attempts = QuizAttempt.objects.filter(date_attempted__gte=time_threshold)   # Fetches quiz attempts done after time_threshold only
 
     # Annotate average score for each user
-    leaderboard = (
+    top_users = (
         attempts.values('user__username')  # group by username
         .annotate(avg_score=Avg('score'))  #calculate average score
         .order_by('-avg_score')[:10]   #Top 10
     )
 
     return render(request, 'quiz/leaderboard.html',{
-        'leaderboard': leaderboard,
+        'top_users': top_users,
         'range': range_filter,
     })
 
